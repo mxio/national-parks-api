@@ -46,3 +46,16 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+/* Main Styles */
+label, input {
+    display: block;
+}
+
+label {
+    margin-top: 10px;
+}
+
+input {
+    margin: 10px 0;
+}
