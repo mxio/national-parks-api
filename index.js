@@ -6,6 +6,18 @@ const searchURL = 'https://developer.nps.gov/api/v1/parks';
 function displayData(responseJson) {
     //name, description, url
     console.log(responseJson);
+
+    $('ul').empty();
+
+    for (let i = 0; i < responseJson.data.length; i++) {
+        $('ul').append(
+            `<li>
+                <h2>${responseJson.data[i].name}</h2>
+                <p>${responseJson.data[i].description}</p>
+                <p><a href="${responseJson.data[i].url}">${responseJson.data[i].url}<a></p>
+            </li>`
+        )   
+    }
 }
 
 function formatApiString(params) {
