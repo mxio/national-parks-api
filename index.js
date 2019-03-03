@@ -1,23 +1,54 @@
 'use strict;'
 
 const apiKey = 'ebf8wzTelsRC8L8vTGnyXgnmpWpxEloj8KbJfsMX';
-const searchURL = 'api.nps.gov/api/v1/parks';
-
-const states = 
+const searchURL = 'https://developer.nps.gov/api/v1/parks';
 
 function displayData() {
     //name, description, url
+    console.log(responseJson);
 }
 
-function getData() {
+function formatLimitString(params) {
+    const inputLimitString = `limit=${params.limit}`;
+    
+    return inputLimitString;
+    
+}
+
+function formatStatesCode(params) {
+    const stateItems = Object.keys(params.stateCode)
+    .map(function(key) {
+        return `stateCode=${encodeURIComponent(params.stateCode[key])}`;
+    })
+    return stateItems.join('&');
+}
+
+function getData(states, maxResults) {
 
     const params = {
-        key: apiKey,
-        q: query,
         stateCode: states,
         limit: maxResults
-    }
-    displayData(params, );
+    };
+
+    const options = {
+        headers: new Headers({
+            "X-Api-Key": apiKey})
+    };
+
+    const stateString = formatStatesCode(params);
+    const limitString = formatLimitString(params);
+    const url = searchURL + "?" + stateString + "&" + limitString;
+    console.log(url);
+
+    fetch(url, options)
+        .then( response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJson => displayData(responseJson))
+        .catch(error => alert(error.message));
 }
 
 function watchForm() {
@@ -25,13 +56,14 @@ function watchForm() {
         event.preventDefault();
 
         const maxResults = $('#results').val();
-        
         const searchInputs = $(':text');
         const states = searchInputs.map(function(input) {
-            return this.value;
-        })
+            if (this.value) {
+                return this.value;
+            }
+        }).toArray();
 
-        getData();
+        getData(states, maxResults);
     })
 }
 
