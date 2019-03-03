@@ -37,7 +37,7 @@ function getData(states, maxResults) {
 
     const stateString = formatStatesCode(params);
     const limitString = formatLimitString(params);
-    const url = searchURL + "?" + stateString + "&" + limitString;
+    const url = searchURL + "?" + apiKey + stateString + "&" + limitString;
     console.log(url);
 
     fetch(url, options)
