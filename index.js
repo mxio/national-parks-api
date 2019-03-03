@@ -3,9 +3,15 @@
 const apiKey = 'ebf8wzTelsRC8L8vTGnyXgnmpWpxEloj8KbJfsMX';
 const searchURL = 'https://developer.nps.gov/api/v1/parks';
 
-function displayData() {
+function displayData(responseJson) {
     //name, description, url
     console.log(responseJson);
+}
+
+function formatApiString(params) {
+    const apiKeyString = `api_key=${params.api_key}`;
+
+    return apiKeyString;
 }
 
 function formatLimitString(params) {
@@ -26,22 +32,19 @@ function formatStatesCode(params) {
 function getData(states, maxResults) {
 
     const params = {
+        api_key: apiKey,
         stateCode: states,
         limit: maxResults
     };
 
-    const options = {
-        headers: new Headers({
-            "X-Api-Key": apiKey})
-    };
-
+    const apiString = formatApiString(params);
     const stateString = formatStatesCode(params);
     const limitString = formatLimitString(params);
-    const url = searchURL + "?" + stateString + "&" + limitString;
+    const url = searchURL + "?" + apiString + "&" + stateString + "&" + limitString;
     console.log(url);
 
-    fetch(url, options)
-        .then( response => {
+    fetch(url)
+        .then(response => {
             if (response.ok) {
                 return response.json();
             }
